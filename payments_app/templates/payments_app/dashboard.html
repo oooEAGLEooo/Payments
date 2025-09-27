@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Аналитика платежей</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Аналитика платежей</h1>
+    
+    <a href="?type={{ next_chart_type }}">
+        <button>{{ next_chart_button }}</button>
+    </a>
+    
+    <div style="height:500px;">
+        <canvas id="paymentChart"></canvas>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('paymentChart').getContext('2d');
+        new Chart(ctx, {
+            type: '{{ chart_type }}',
+            data: {
+                labels: {{ labels|safe }},
+                datasets: [{
+                    label: 'Сумма платежа',
+                    data: {{ data|safe }},
+                    {% if chart_type == 'line' %}
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                    {% else %}
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    {% endif %}
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
